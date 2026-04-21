@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { roomService } from "@/lib/livekit"
 
 const createSchema = z.object({
   communityId: z.string(),
@@ -25,13 +26,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Not a member" }, { status: 403 })
   }
 
+  const roomName = `${communityId}-${Date.now()}`
+
+  // Create the room explicitly so we can set emptyTimeout (5 minutes)
+  await roomService().createRoom({
+    name: roomName,
+    emptyTimeout: 300,
+    maxParticipants: 50,
+  })
+
   const stream = await prisma.stream.create({
-    data: {
-      roomName: `${communityId}-${Date.now()}`,
-      title,
-      communityId,
-      hostId: session.user.id,
-    },
+    data: { roomName, title, communityId, hostId: session.user.id },
   })
   return NextResponse.json(stream, { status: 201 })
 }
