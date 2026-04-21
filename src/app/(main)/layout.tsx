@@ -1,6 +1,7 @@
 import { auth, signOut } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
+import BuildDate from "@/components/build-date"
 
 const navLinks = [
   ["Dashboard", "/dashboard"],
@@ -50,7 +51,7 @@ export default async function MainLayout({
           </form>
           <div className="text-xs text-gray-300 leading-relaxed">
             <div>{process.env.BUILD_COMMIT}</div>
-            <div>{new Date(process.env.BUILD_DATE!).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })}</div>
+            <BuildDate isoDate={process.env.BUILD_DATE!} />
           </div>
         </div>
       </aside>
