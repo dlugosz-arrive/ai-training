@@ -34,7 +34,7 @@ export default async function MainLayout({
             </Link>
           ))}
         </nav>
-        <div className="p-4 border-t">
+        <div className="p-4 border-t space-y-3">
           <form
             action={async () => {
               "use server"
@@ -48,6 +48,10 @@ export default async function MainLayout({
               Sign Out
             </button>
           </form>
+          <div className="text-xs text-gray-300 leading-relaxed">
+            <div>{process.env.BUILD_COMMIT}</div>
+            <div>{new Date(process.env.BUILD_DATE!).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })}</div>
+          </div>
         </div>
       </aside>
       <main className="flex-1 overflow-auto p-8">{children}</main>
