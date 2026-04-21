@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import ConnectionActions from "./connection-actions"
+import RemoveConnection from "./remove-connection"
 import SendConnectionRequest from "./send-connection-request"
 
 export default async function ConnectionsPage() {
@@ -64,11 +65,14 @@ export default async function ConnectionsPage() {
             {accepted.map((c) => {
               const other = c.requesterId === userId ? c.receiver : c.requester
               return (
-                <div key={c.id} className="px-6 py-3 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-sm shrink-0">
-                    {other.name?.[0]?.toUpperCase() ?? "?"}
+                <div key={c.id} className="px-6 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-sm shrink-0">
+                      {other.name?.[0]?.toUpperCase() ?? "?"}
+                    </div>
+                    <span className="text-sm font-medium">{other.name}</span>
                   </div>
-                  <span className="text-sm font-medium">{other.name}</span>
+                  <RemoveConnection connectionId={c.id} />
                 </div>
               )
             })}

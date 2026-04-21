@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import JoinButton from "./join-button"
+import LeaveButton from "./leave-button"
 import StartStreamButton from "./start-stream-button"
 
 export default async function CommunityPage({
@@ -49,7 +50,10 @@ export default async function CommunityPage({
           </div>
           <div className="shrink-0">
             {isMember ? (
-              <StartStreamButton communityId={community.id} />
+              <div className="flex gap-2">
+                <StartStreamButton communityId={community.id} />
+                <LeaveButton communityId={community.id} />
+              </div>
             ) : (
               <JoinButton communityId={community.id} />
             )}
