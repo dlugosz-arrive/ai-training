@@ -1,11 +1,8 @@
-import dynamic from "next/dynamic"
 import { auth } from "@/lib/auth"
 import { generateToken } from "@/lib/livekit"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
-
-// ssr: false prevents livekit-client from running on the server (it uses browser WebRTC APIs)
-const StreamRoom = dynamic(() => import("./stream-room"), { ssr: false })
+import StreamClient from "./stream-client"
 
 export default async function StreamPage({
   params,
@@ -28,7 +25,7 @@ export default async function StreamPage({
   if (!stream || stream.status === "ENDED") redirect(`/communities/${id}`)
 
   return (
-    <StreamRoom
+    <StreamClient
       communityId={id}
       roomName={room}
       token={token}
