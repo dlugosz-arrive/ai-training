@@ -7,6 +7,7 @@ const navLinks = [
   ["Dashboard", "/dashboard"],
   ["Communities", "/communities"],
   ["Connections", "/connections"],
+  ["Messages", "/messages"],
 ] as const
 
 export default async function MainLayout({

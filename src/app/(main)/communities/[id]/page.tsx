@@ -5,6 +5,7 @@ import Link from "next/link"
 import JoinButton from "./join-button"
 import LeaveButton from "./leave-button"
 import StartStreamButton from "./start-stream-button"
+import ChatPanel from "@/components/chat-panel"
 
 export default async function CommunityPage({
   params,
@@ -83,19 +84,34 @@ export default async function CommunityPage({
         </section>
       )}
 
-      <section>
-        <h2 className="text-xl font-semibold mb-4">Members</h2>
-        <div className="bg-white rounded-xl shadow divide-y">
-          {community.memberships.map(({ user }) => (
-            <div key={user.id} className="px-6 py-3 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-sm shrink-0">
-                {user.name?.[0]?.toUpperCase() ?? "?"}
-              </div>
-              <span className="text-sm font-medium">{user.name}</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <section className="lg:col-span-2">
+          <h2 className="text-xl font-semibold mb-4">Group Chat</h2>
+          {isMember ? (
+            <div style={{ height: "400px" }}>
+              <ChatPanel currentUserId={userId} communityId={community.id} />
             </div>
-          ))}
-        </div>
-      </section>
+          ) : (
+            <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-500">
+              Join this community to participate in the group chat.
+            </div>
+          )}
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold mb-4">Members</h2>
+          <div className="bg-white rounded-xl shadow divide-y">
+            {community.memberships.map(({ user }) => (
+              <div key={user.id} className="px-4 py-3 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-sm shrink-0">
+                  {user.name?.[0]?.toUpperCase() ?? "?"}
+                </div>
+                <span className="text-sm font-medium">{user.name}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import Link from "next/link"
 import ConnectionActions from "./connection-actions"
 import RemoveConnection from "./remove-connection"
 import SendConnectionRequest from "./send-connection-request"
@@ -72,7 +73,15 @@ export default async function ConnectionsPage() {
                     </div>
                     <span className="text-sm font-medium">{other.name}</span>
                   </div>
-                  <RemoveConnection connectionId={c.id} />
+                  <div className="flex gap-2">
+                    <Link
+                      href={`/messages/${other.id}`}
+                      className="px-3 py-1 border border-blue-600 text-blue-600 rounded-lg text-sm hover:bg-blue-50"
+                    >
+                      Message
+                    </Link>
+                    <RemoveConnection connectionId={c.id} />
+                  </div>
                 </div>
               )
             })}

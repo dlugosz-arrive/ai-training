@@ -22,8 +22,10 @@ model User {
   sessions            Session[]
   memberships         Membership[]
   streams             Stream[]
-  sentConnections     Connection[] @relation("ConnectionRequester")
-  receivedConnections Connection[] @relation("ConnectionReceiver")
+  sentConnections     Connection[]  @relation("ConnectionRequester")
+  receivedConnections Connection[]  @relation("ConnectionReceiver")
+  sentMessages        Message[]     @relation("MessageSender")
+  receivedMessages    Message[]     @relation("MessageReceiver")
 }
 
 model Account {
@@ -74,6 +76,7 @@ model Community {
 
   memberships Membership[]
   streams     Stream[]
+  messages    Message[]
 }
 
 model Membership {
@@ -131,4 +134,17 @@ model Stream {
 enum StreamStatus {
   LIVE
   ENDED
+}
+
+model Message {
+  id          String    @id @default(cuid())
+  content     String
+  createdAt   DateTime  @default(now())
+  senderId    String
+  communityId String?
+  receiverId  String?
+
+  sender    User       @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  community Community? @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  receiver  User?      @relation("MessageReceiver", fields: [receiverId], references: [id])
 }
